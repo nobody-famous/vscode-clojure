@@ -1,0 +1,14 @@
+{
+    "Let Expression": {
+        "prefix": "let",
+        "body": ["let (($1))", "    $0", ""]
+    },
+    "Let-Star Expression": {
+        "prefix": "let*",
+        "body": ["let* (($1))", "    $0", ""]
+    },
+    "Define Function": {
+        "prefix": "defn",
+        "body": ["defn ${1:name} ($2)", "    $0", ""]
+    }
+}
