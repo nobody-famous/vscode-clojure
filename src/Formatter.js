@@ -106,6 +106,11 @@ module.exports.Formatter = class {
         }
     }
 
+    isOpenBracket(token) {
+        return token.type === types.OPEN_SQ_BRACKETS
+            || token.type === types.OPEN_CRLY_BRACKETS;
+    }
+
     isCloseToken(token) {
         return token.type === types.CLOSE_PARENS
             || token.type === types.CLOSE_SQ_BRACKETS
@@ -173,7 +178,7 @@ module.exports.Formatter = class {
 
     setIndent(sexpr) {
         if (sexpr.indent === undefined) {
-            sexpr.alignNext = true;
+            sexpr.alignNext = (this.isOpenBracket(sexpr.open)) ? false : true;
             sexpr.indent = this.alignIndent(sexpr, this.token);
         } else if (sexpr.alignNext) {
             sexpr.indent = this.alignIndent(sexpr, this.token);
@@ -182,7 +187,7 @@ module.exports.Formatter = class {
     }
 
     alignIndent(sexpr, token) {
-        return (sexpr.isParamList || sexpr.isAligned)
+        return (sexpr.isParamList || sexpr.isAligned || this.isOpenBracket(sexpr.open))
             ? token.start.character
             : sexpr.open.start.character + this.indentWidth;
     }
