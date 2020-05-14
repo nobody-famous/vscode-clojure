@@ -198,7 +198,10 @@ module.exports.Formatter = class {
         }
 
         if (this.sexprs.length === 0) {
-            // TODO: Handle white space between expressions. I.e., remove or add lines depending on setings
+            if (this.fixWhitespace) {
+                this.trimWS(this.token);
+                this.fixIndent(this.token, 0);
+            }
         } else if (this.isCloseToken(this.tokens[this.token.ndx + 1])) {
             // Close parens code handles this
         } else {
@@ -224,6 +227,8 @@ module.exports.Formatter = class {
 
         while (start < token.text.length && token.text.charAt(start) === '\n') {
             start += 1;
+            line += 1;
+            startChar = 0;
         }
 
         let end = start + 1;
