@@ -63,9 +63,26 @@ module.exports.Lexer = class {
                 return this.pound();
             case ';':
                 return this.comment();
+            case '\\':
+                return this.escape();
             default:
                 return this.id();
         }
+    }
+
+    escape() {
+        this.curText += this.peek();
+        this.consume();
+
+        this.curText += this.peek();
+        this.consume();
+
+        while (!this.isDelimiter(this.peek())) {
+            this.curText += this.peek();
+            this.consume();
+        }
+
+        return this.newToken(types.QUOTED);
     }
 
     comment() {
